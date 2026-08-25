@@ -9,7 +9,7 @@ app.secret_key = "dmxproxy_secret_key_super_safe"
 # ================================
 # CẤU HÌNH TÀI KHOẢN VÀ MẬT KHẨU
 # ================================
-ADMIN_USERNAME = ""        # Tên tài khoản
+ADMIN_USERNAME = "DMXProxy"        # Tên tài khoản
 ADMIN_PASSWORD = "123456"          # Mật khẩu đăng nhập
 
 @app.route('/')
