@@ -206,59 +206,47 @@
     </div>
 
     <script>
-        let currentProxies = [];
+document.addEventListener('DOMContentLoaded', function() {
+    const btn = Array.from(document.querySelectorAll('button')).find(el => el.textContent.includes('Generate')) || document.querySelector('.btn-primary');
 
-        async function generateProxies() {
-            const country = document.getElementById('country').value;
-            const city = document.getElementById('city').value;
-            const os = document.getElementById('os').value;
-            const qty = document.getElementById('qty').value;
+    if (btn) {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
 
-            const res = await fetch('/api/generate', {
+            const countrySelect = document.getElementById('country');
+            const countryVal = countrySelect ? countrySelect.value : 'ALL';
+
+            const osSelect = document.querySelector('select[id*="os"]') || document.querySelectorAll('select')[2];
+            const osVal = osSelect ? osSelect.value : 'Windows';
+
+            const qtyInput = document.querySelector('input[type="number"]') || document.querySelector('input[value="10"]');
+            const qtyVal = qtyInput ? qtyInput.value : 10;
+
+            fetch('/generate', {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ country, city, os, qty })
-            });
-
-            const data = await res.json();
-            if(data.status === 'success') {
-                currentProxies = data.proxies;
-                document.getElementById('proxyCount').innerText = `(${data.count})`;
-                document.getElementById('genText').innerText = `Generated ${data.count}.`;
-
-                const tbody = document.getElementById('proxyRows');
-                tbody.innerHTML = '';
-                data.proxies.forEach(p => {
-                    tbody.innerHTML += `
-                        <tr>
-                            <td>${p.id}</td>
-                            <td>${p.proxy}</td>
-                            <td><div class="ip-badge"><div class="ip-dot"></div>${p.exit_ip}</div></td>
-                        </tr>
-                    `;
-                });
-            }
-        }
-
-        function copyAll() {
-            if(currentProxies.length === 0) return alert('Chưa có danh sách proxy!');
-            const text = currentProxies.map(p => p.proxy).join('\n');
-            navigator.clipboard.writeText(text);
-            alert('Đã copy toàn bộ danh sách Proxy!');
-        }
-
-        function downloadTxt() {
-            if(currentProxies.length === 0) return alert('Chưa có danh sách proxy!');
-            const text = currentProxies.map(p => p.proxy).join('\n');
-            const blob = new Blob([text], { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'proxy_list.txt';
-            a.click();
-        }
-
-        // Khởi tạo ngay khi tải trang
-        generateProxies();
-    </script>
-</body>
-</html>
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ country: countryVal, os: osVal, qty: qtyVal })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.proxies && data.proxies.length > 0) {
+                    const tbody = document.getElementById('proxyRows') || document.querySelector('tbody');
+                    if (tbody) {
+                        tbody.innerHTML = '';
+                        data.proxies.forEach((proxy, idx) => {
+                            tbody.innerHTML += `
+                                <tr>
+                                    <td style="padding: 12px; border-bottom: 1px solid #eee;">${idx + 1}</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid #eee; font-family: monospace;">${proxy}</td>
+                                    <td style="padding: 12px; border-bottom: 1px solid #eee;"><span style="color: #28a745; font-weight: bold;">● Online</span></td>
+                                </tr>
+                            `;
+                        });
+                    }
+                }
+            })
+            .catch(err => console.error('Lỗi kết nối server:', err));
+        });
+    }
+});
+</script>
