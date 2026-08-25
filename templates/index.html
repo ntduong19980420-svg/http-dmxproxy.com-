@@ -3,60 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DMX Proxy</title>
+    <title>DMX Proxy - Proxyrack Generator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <style>
-        body { background-color: #f4f6fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        .navbar-custom { background-color: #ffffff; border-bottom: 1px solid #e5e7eb; padding: 12px 24px; }
-        .brand-logo { width: 32px; height: 32px; background-color: #3b82f6; border-radius: 8px; color: white; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
-        .nav-tabs-custom .nav-link { border: none; padding: 8px 16px; font-weight: 500; border-radius: 8px; color: #4b5563; margin-right: 8px; }
-        .nav-tabs-custom .nav-link.active { background-color: #6366f1; color: white; }
-        .card-custom { background: white; border-radius: 12px; border: 1px solid #e5e7eb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .btn-generate { background-color: #6366f1; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; width: 100%; }
-        .btn-generate:hover { background-color: #4f46e5; color: white; }
-        .btn-generate:disabled { background-color: #9ca3af; }
-        .table-custom th { background-color: #f9fafb; color: #6b7280; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; padding: 12px 16px; border-bottom: 1px solid #e5e7eb; }
-        .table-custom td { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 14px; vertical-align: middle; }
-        .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; }
-        .badge-gb { background-color: #fff7ed; color: #c2410c; border: 1px solid #ffedd5; padding: 4px 8px; border-radius: 20px; font-size: 12px; }
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .card { border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .btn-primary { background-color: #4f46e5; border-color: #4f46e5; }
+        .btn-primary:hover { background-color: #4338ca; border-color: #4338ca; }
     </style>
 </head>
 <body>
-
-    <!-- Header Navigation -->
-    <div class="navbar-custom d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center gap-2">
-            <div class="brand-logo">D</div>
-            <span class="fw-bold fs-5">DMX Proxy</span>
-        </div>
-        <div class="d-flex align-items-center gap-3 fs-14">
-            <span class="text-success small"><i class="bi bi-circle-fill" style="font-size: 8px;"></i> connected</span>
-            <span class="text-secondary small"><i class="bi bi-person"></i> (admin)</span>
-            <button class="btn btn-outline-secondary btn-sm px-3">Sign out</button>
-        </div>
-    </div>
-
-    <div class="container-fluid px-4 py-4">
-        <!-- Tabs -->
-        <ul class="nav nav-tabs-custom border-0 mb-4">
-            <li class="nav-item"><a class="nav-link active" href="#"><i class="bi bi-list"></i> Lister</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-search"></i> Socks5</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-lightning-charge"></i> Shipper</a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="bi bi-check2-square"></i> Check</a></li>
-        </ul>
-
-        <div class="row g-4">
-            <!-- Left Panel: Form controls -->
-            <div class="col-lg-3">
-                <div class="card-custom p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h6 class="fw-bold m-0">Geo & OS</h6>
-                        <span class="badge-gb"><i class="bi bi-lightning-charge-fill"></i> 43.0 GB left</span>
-                    </div>
-
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card p-4">
+                    <h3 class="fw-bold mb-4">DMX Proxy - Proxyrack Generator</h3>
+                    
                     <div class="mb-3">
-                        <label class="form-label text-secondary small fw-semibold">Country</label>
+                        <label class="form-label fw-bold">Quốc gia (Country)</label>
                         <select id="country" class="form-select">
                             <option value="ALL">All Countries (Ngẫu nhiên)</option>
                             <option value="US">United States</option>
@@ -68,25 +32,12 @@
                             <option value="KR">South Korea</option>
                             <option value="CA">Canada</option>
                             <option value="AU">Australia</option>
-                            <option value="CN">China</option>
-                            <option value="IN">India</option>
-                            <option value="TH">Thailand</option>
                             <option value="SG">Singapore</option>
-                            <option value="RU">Russia</option>
-                            <option value="BR">Brazil</option>
-                            <option value="AR" selected>Argentina</option>
                         </select>
                     </div>
 
                     <div class="mb-3">
-                        <label class="form-label text-secondary small fw-semibold">City</label>
-                        <select class="form-select" disabled>
-                            <option>🎲 Random</option>
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label class="form-label text-secondary small fw-semibold">Operating System</label>
+                        <label class="form-label fw-bold">Hệ điều hành (OS)</label>
                         <select id="os" class="form-select">
                             <option value="Windows">Windows</option>
                             <option value="MAC">macOS</option>
@@ -95,42 +46,27 @@
                         </select>
                     </div>
 
-                    <button id="btnGenerate" class="btn-generate">
-                        <i class="bi bi-lightning-charge-fill"></i> Generate
-                    </button>
-                    <div class="text-secondary small mt-2" id="genCountInfo">Generated 0.</div>
-                </div>
-            </div>
-
-            <!-- Right Panel: Proxy table -->
-            <div class="col-lg-9">
-                <div class="card-custom p-4">
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <div class="fw-bold">Proxy list <span class="text-secondary fw-normal" id="listQtyText">(0)</span></div>
-                        <div class="d-flex gap-2 align-items-center">
-                            <span class="text-secondary small">Qty</span>
-                            <input type="number" id="qty" class="form-control form-control-sm text-center" value="10" style="width: 60px;">
-                            <span class="text-secondary small ms-2">Format</span>
-                            <select class="form-select form-select-sm" style="width: 160px;">
-                                <option>host:port:user:pass</option>
-                            </select>
-                            <button class="btn btn-light btn-sm border" onclick="copyProxies()">Copy</button>
-                            <button class="btn btn-light btn-sm border">.txt</button>
-                        </div>
+                    <div class="mb-4">
+                        <label class="form-label fw-bold">Số lượng (Quantity)</label>
+                        <input type="number" id="qty" class="form-control" value="10" min="1" max="100">
                     </div>
 
-                    <div class="table-responsive">
-                        <table class="table table-custom align-middle mb-0">
-                            <thead>
+                    <button id="btnGenerate" class="btn btn-primary w-100 py-2 fw-bold">
+                        ⚡ Generate Proxy
+                    </button>
+
+                    <div class="mt-4">
+                        <table class="table table-bordered align-middle">
+                            <thead class="table-light">
                                 <tr>
                                     <th style="width: 50px;">#</th>
                                     <th>PROXY</th>
-                                    <th style="width: 200px;">EXIT IP</th>
+                                    <th style="width: 120px;">STATUS</th>
                                 </tr>
                             </thead>
                             <tbody id="proxyRows">
                                 <tr>
-                                    <td colspan="3" class="text-center text-muted py-4">Chưa có proxy nào được tạo. Nhấn "Generate" để hiển thị.</td>
+                                    <td colspan="3" class="text-center text-muted">Chưa có proxy nào được tạo. Nhấn "Generate Proxy" để lấy danh sách.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -141,17 +77,13 @@
     </div>
 
     <script>
-        let currentProxyList = [];
-
         document.getElementById('btnGenerate').addEventListener('click', function() {
             const country = document.getElementById('country').value;
             const os = document.getElementById('os').value;
             const qty = document.getElementById('qty').value;
             const tbody = document.getElementById('proxyRows');
-            const btn = document.getElementById('btnGenerate');
 
-            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm text-primary me-2"></div>Đang tạo và check IP...</td></tr>';
-            btn.disabled = true;
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">Đang tạo proxy...</td></tr>';
 
             fetch('/generate', {
                 method: 'POST',
@@ -160,42 +92,26 @@
             })
             .then(res => res.json())
             .then(data => {
-                btn.disabled = false;
                 if (data.proxies && data.proxies.length > 0) {
-                    currentProxyList = data.proxies.map(item => item.proxy);
                     tbody.innerHTML = '';
-                    document.getElementById('genCountInfo').innerText = `Generated ${data.proxies.length}.`;
-                    document.getElementById('listQtyText').innerText = `(${data.proxies.length})`;
-
-                    data.proxies.forEach((item, idx) => {
-                        let ipDisplay = item.exit_ip === "Check Failed" 
-                            ? `<span class="text-danger small">● Fail/Timeout</span>` 
-                            : `<span class="text-success fw-bold font-monospace">● ${item.exit_ip}</span>`;
-
+                    data.proxies.forEach((proxy, idx) => {
                         tbody.innerHTML += `
                             <tr>
-                                <td class="text-secondary">${idx + 1}</td>
-                                <td class="mono fw-medium">${item.proxy}</td>
-                                <td>${ipDisplay}</td>
+                                <td>${idx + 1}</td>
+                                <td class="font-monospace">${proxy}</td>
+                                <td><span class="badge bg-success">Active</span></td>
                             </tr>
                         `;
                     });
                 } else {
-                    tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Không lấy được danh sách Proxy!</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger">Lỗi lấy proxy!</td></tr>';
                 }
             })
             .catch(err => {
-                btn.disabled = false;
                 console.error(err);
-                tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Lỗi kết nối Server!</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger">Lỗi kết nối Server!</td></tr>';
             });
         });
-
-        function copyProxies() {
-            if (currentProxyList.length === 0) return;
-            navigator.clipboard.writeText(currentProxyList.join('\n'));
-            alert('Đã copy danh sách Proxy!');
-        }
     </script>
 </body>
 </html>
