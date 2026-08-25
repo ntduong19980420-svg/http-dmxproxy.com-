@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMX Proxy</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <style>
+        body { background-color: #f4f6f9; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        .navbar-brand { font-weight: 700; color: #1e293b; font-size: 1.25rem; }
+        .logo-icon { width: 32px; height: 32px; background: #3b82f6; color: white; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; margin-right: 8px; }
+        .nav-btn { border-radius: 8px; padding: 6px 16px; font-weight: 500; font-size: 0.9rem; border: none; margin-right: 8px; background: #fff; color: #64748b; }
+        .nav-btn.active { background: #6366f1; color: white; }
+        .card-custom { border: none; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); background: white; }
+        .btn-generate { background: #4f46e5; color: white; border-radius: 8px; padding: 10px; font-weight: 600; border: none; }
+        .btn-generate:hover { background: #4338ca; color: white; }
+        .badge-gb { background: #fff7ed; color: #f97316; border: 1px solid #ffedd5; border-radius: 20px; font-size: 0.8rem; padding: 4px 10px; }
+        .status-dot { width: 8px; height: 8px; background: #22c55e; border-radius: 50%; display: inline-block; margin-right: 4px; }
+        .ip-badge { background: #f0fdf4; color: #15803d; border-radius: 12px; font-size: 0.75rem; padding: 3px 8px; font-weight: 600; font-family: monospace; }
+        .table > :not(caption) > * > * { padding: 12px 16px; border-bottom-color: #f1f5f9; }
+        .form-select, .form-control { border-radius: 8px; border-color: #e2e8f0; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-light bg-white border-bottom py-2 mb-4">
+        <div class="container-fluid px-4">
+            <div class="d-flex align-items-center">
+                <span class="logo-icon">D</span>
+                <span class="navbar-brand mb-0">DMX Proxy</span>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-secondary small"><i class="status-dot"></i>connected</span>
+                <span class="text-secondary small"><i class="bi bi-person-fill me-1"></i>DMXProxy (admin)</span>
+                <button class="btn btn-sm btn-outline-secondary rounded-2">Sign out</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-4">
+        <!-- Top Navigation Tabs -->
+        <div class="d-flex mb-4">
+            <button class="nav-btn active"><i class="bi bi-list-task me-1"></i> Lister</button>
+            <button class="nav-btn"><i class="bi bi-search me-1"></i> Socks5</button>
+            <button class="nav-btn"><i class="bi bi-lightning-charge me-1"></i> Shipper</button>
+            <button class="nav-btn"><i class="bi bi-check2-square me-1"></i> Check</button>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left Sidebar Controls -->
+            <div class="col-lg-3">
+                <div class="card card-custom p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold mb-0">Geo & OS</h6>
+                        <span class="badge-gb"><i class="bi bi-lightning-charge-fill me-1"></i>43.0 GB left</span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-semibold">Country</label>
+                        <select id="country" class="form-select">
+                            <option value="ALL">All Countries (Ngẫu nhiên)</option>
+                            <option value="AF">Afghanistan</option>
+                            <option value="AL">Albania</option>
+                            <option value="DZ">Algeria</option>
+                            <option value="AS">American Samoa</option>
+                            <option value="AD">Andorra</option>
+                            <option value="AO">Angola</option>
+                            <option value="AI">Anguilla</option>
+                            <option value="AG">Antigua and Barbuda</option>
+                            <option value="AR">Argentina</option>
+                            <option value="AM">Armenia</option>
+                            <option value="AW">Aruba</option>
+                            <option value="AU">Australia</option>
+                            <option value="AT">Austria</option>
+                            <option value="AZ">Azerbaijan</option>
+                            <option value="BS">Bahamas</option>
+                            <option value="BH">Bahrain</option>
+                            <option value="BD">Bangladesh</option>
+                            <option value="BB">Barbados</option>
+                            <option value="BY">Belarus</option>
+                            <option value="BE">Belgium</option>
+                            <option value="BZ">Belize</option>
+                            <option value="BJ">Benin</option>
+                            <option value="BM">Bermuda</option>
+                            <option value="BT">Bhutan</option>
+                            <option value="BO">Bolivia</option>
+                            <option value="BA">Bosnia and Herzegovina</option>
+                            <option value="BW">Botswana</option>
+                            <option value="BR">Brazil</option>
+                            <option value="BN">Brunei</option>
+                            <option value="BG">Bulgaria</option>
+                            <option value="BF">Burkina Faso</option>
+                            <option value="BI">Burundi</option>
+                            <option value="KH">Cambodia</option>
+                            <option value="CM">Cameroon</option>
+                            <option value="CA">Canada</option>
+                            <option value="CV">Cape Verde</option>
+                            <option value="KY">Cayman Islands</option>
+                            <option value="CF">Central African Republic</option>
+                            <option value="TD">Chad</option>
+                            <option value="CL">Chile</option>
+                            <option value="CN">China</option>
+                            <option value="CO">Colombia</option>
+                            <option value="KM">Comoros</option>
+                            <option value="CG">Congo</option>
+                            <option value="CR">Costa Rica</option>
+                            <option value="HR">Croatia</option>
+                            <option value="CU">Cuba</option>
+                            <option value="CY">Cyprus</option>
+                            <option value="CZ">Czech Republic</option>
+                            <option value="DK">Denmark</option>
+                            <option value="DJ">Djibouti</option>
+                            <option value="DM">Dominica</option>
+                            <option value="DO">Dominican Republic</option>
+                            <option value="EC">Ecuador</option>
+                            <option value="EG">Egypt</option>
+                            <option value="SV">El Salvador</option>
+                            <option value="GQ">Equatorial Guinea</option>
+                            <option value="ER">Eritrea</option>
+                            <option value="EE">Estonia</option>
+                            <option value="ET">Ethiopia</option>
+                            <option value="FJ">Fiji</option>
+                            <option value="FI">Finland</option>
+                            <option value="FR">France</option>
+                            <option value="GA">Gabon</option>
+                            <option value="GM">Gambia</option>
+                            <option value="GE">Georgia</option>
+                            <option value="DE">Germany</option>
+                            <option value="GH">Ghana</option>
+                            <option value="GI">Gibraltar</option>
+                            <option value="GR">Greece</option>
+                            <option value="GL">Greenland</option>
+                            <option value="GD">Grenada</option>
+                            <option value="GU">Guam</option>
+                            <option value="GT">Guatemala</option>
+                            <option value="GN">Guinea</option>
+                            <option value="GW">Guinea-Bissau</option>
+                            <option value="GY">Guyana</option>
+                            <option value="HT">Haiti</option>
+                            <option value="HN">Honduras</option>
+                            <option value="HK">Hong Kong</option>
+                            <option value="HU">Hungary</option>
+                            <option value="IS">Iceland</option>
+                            <option value="IN">India</option>
+                            <option value="ID">Indonesia</option>
+                            <option value="IR">Iran</option>
+                            <option value="IQ">Iraq</option>
+                            <option value="IE">Ireland</option>
+                            <option value="IL">Israel</option>
+                            <option value="IT">Italy</option>
+                            <option value="JM">Jamaica</option>
+                            <option value="JP">Japan</option>
+                            <option value="JO">Jordan</option>
+                            <option value="KZ">Kazakhstan</option>
+                            <option value="KE">Kenya</option>
+                            <option value="KP">Korea, North</option>
+                            <option value="KR">Korea, South</option>
+                            <option value="KW">Kuwait</option>
+                            <option value="KG">Kyrgyzstan</option>
+                            <option value="LA">Laos</option>
+                            <option value="LV">Latvia</option>
+                            <option value="LB">Lebanon</option>
+                            <option value="LS">Lesotho</option>
+                            <option value="LR">Liberia</option>
+                            <option value="LY">Libya</option>
+                            <option value="LI">Liechtenstein</option>
+                            <option value="LT">Lithuania</option>
+                            <option value="LU">Luxembourg</option>
+                            <option value="MO">Macau</option>
+                            <option value="MK">Macedonia</option>
+                            <option value="MG">Madagascar</option>
+                            <option value="MW">Malawi</option>
+                            <option value="MY">Malaysia</option>
+                            <option value="MV">Maldives</option>
+                            <option value="ML">Mali</option>
+                            <option value="MT">Malta</option>
+                            <option value="MR">Mauritania</option>
+                            <option value="MU">Mauritius</option>
+                            <option value="MX">Mexico</option>
+                            <option value="MD">Moldova</option>
+                            <option value="MC">Monaco</option>
+                            <option value="MN">Mongolia</option>
+                            <option value="ME">Montenegro</option>
+                            <option value="MA">Morocco</option>
+                            <option value="MZ">Mozambique</option>
+                            <option value="MM">Myanmar</option>
+                            <option value="NA">Namibia</option>
+                            <option value="NP">Nepal</option>
+                            <option value="NL">Netherlands</option>
+                            <option value="NZ">New Zealand</option>
+                            <option value="NI">Nicaragua</option>
+                            <option value="NE">Niger</option>
+                            <option value="NG">Nigeria</option>
+                            <option value="NO">Norway</option>
+                            <option value="OM">Oman</option>
+                            <option value="PK">Pakistan</option>
+                            <option value="PA">Panama</option>
+                            <option value="PG">Papua New Guinea</option>
+                            <option value="PY">Paraguay</option>
+                            <option value="PE">Peru</option>
+                            <option value="PH">Philippines</option>
+                            <option value="PL">Poland</option>
+                            <option value="PT">Portugal</option>
+                            <option value="PR">Puerto Rico</option>
+                            <option value="QA">Qatar</option>
+                            <option value="RO">Romania</option>
+                            <option value="RU">Russia</option>
+                            <option value="RW">Rwanda</option>
+                            <option value="SA">Saudi Arabia</option>
+                            <option value="SN">Senegal</option>
+                            <option value="RS">Serbia</option>
+                            <option value="SC">Seychelles</option>
+                            <option value="SL">Sierra Leone</option>
+                            <option value="SG">Singapore</option>
+                            <option value="SK">Slovakia</option>
+                            <option value="SI">Slovenia</option>
+                            <option value="SO">Somalia</option>
+                            <option value="ZA">South Africa</option>
+                            <option value="ES">Spain</option>
+                            <option value="LK">Sri Lanka</option>
+                            <option value="SD">Sudan</option>
+                            <option value="SE">Sweden</option>
+                            <option value="CH">Switzerland</option>
+                            <option value="SY">Syria</option>
+                            <option value="TW">Taiwan</option>
+                            <option value="TJ">Tajikistan</option>
+                            <option value="TZ">Tanzania</option>
+                            <option value="TH">Thailand</option>
+                            <option value="TL">Timor-Leste</option>
+                            <option value="TG">Togo</option>
+                            <option value="TN">Tunisia</option>
+                            <option value="TR">Turkey</option>
+                            <option value="TM">Turkmenistan</option>
+                            <option value="UG">Uganda</option>
+                            <option value="UA">Ukraine</option>
+                            <option value="AE">United Arab Emirates</option>
+                            <option value="GB">United Kingdom</option>
+                            <option value="US">United States</option>
+                            <option value="UY">Uruguay</option>
+                            <option value="UZ">Uzbekistan</option>
+                            <option value="VE">Venezuela</option>
+                            <option value="VN" selected>Vietnam</option>
+                            <option value="YE">Yemen</option>
+                            <option value="ZM">Zambia</option>
+                            <option value="ZW">Zimbabwe</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small text-muted fw-semibold">City</label>
+                        <select id="city" class="form-select" disabled>
+                            <option>🎲 Random</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label small text-muted fw-semibold">Operating System</label>
+                        <select id="os" class="form-select">
+                            <option value="Windows" selected>Windows</option>
+                            <option value="MAC">macOS</option>
+                            <option value="Android">Android</option>
+                            <option value="iOS">iOS</option>
+                        </select>
+                    </div>
+
+                    <button id="btnGenerate" class="btn btn-generate w-100 mb-2">
+                        <i class="bi bi-lightning-fill me-1"></i> Generate
+                    </button>
+                    <div id="genCount" class="text-muted small">Generated 10.</div>
+                </div>
+            </div>
+
+            <!-- Right Proxy Table -->
+            <div class="col-lg-9">
+                <div class="card card-custom p-3">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h6 class="fw-bold mb-0">Proxy list (<span id="listQty">10</span>)</h6>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="small text-muted">Qty</span>
+                            <input type="number" id="qty" class="form-control form-control-sm text-center" value="10" min="1" max="100" style="width: 60px;">
+                            <span class="small text-muted ms-2">Format</span>
+                            <select class="form-select form-select-sm" style="width: 140px;">
+                                <option>host:port:user:pas</option>
+                            </select>
+                            <button id="btnCopy" class="btn btn-sm btn-outline-secondary px-3 ms-2">Copy</button>
+                            <button id="btnExport" class="btn btn-sm btn-outline-secondary px-3">.txt</button>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="table align-middle">
+                            <thead>
+                                <tr class="text-muted small">
+                                    <th style="width: 40px;">#</th>
+                                    <th>PROXY</th>
+                                    <th style="width: 120px;" class="text-end">EXIT IP</th>
+                                </tr>
+                            </thead>
+                            <tbody id="proxyRows" class="small">
+                                <tr>
+                                    <td colspan="3" class="text-center text-muted py-4">Nhấn "Generate" để lấy danh sách.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentProxies = [];
+
+        function randomIP() {
+            return Math.floor(Math.random() * 200 + 10) + "." + 
+                   Math.floor(Math.random() * 255) + "." + 
+                   Math.floor(Math.random() * 255) + "." + 
+                   Math.floor(Math.random() * 255);
+        }
+
+        document.getElementById('btnGenerate').addEventListener('click', function() {
+            const country = document.getElementById('country').value;
+            const os = document.getElementById('os').value;
+            const qty = document.getElementById('qty').value;
+            const tbody = document.getElementById('proxyRows');
+
+            tbody.innerHTML = '<tr><td colspan="3" class="text-center text-muted py-4"><div class="spinner-border spinner-border-sm me-2"></div>Đang tạo proxy...</td></tr>';
+
+            fetch('/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ country: country, os: os, qty: qty })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.proxies && data.proxies.length > 0) {
+                    currentProxies = data.proxies;
+                    tbody.innerHTML = '';
+                    document.getElementById('listQty').innerText = data.proxies.length;
+                    document.getElementById('genCount').innerText = `Generated ${data.proxies.length}.`;
+
+                    data.proxies.forEach((proxy, idx) => {
+                        tbody.innerHTML += `
+                            <tr>
+                                <td class="text-muted">${idx + 1}</td>
+                                <td class="font-monospace text-break">${proxy}</td>
+                                <td class="text-end"><span class="ip-badge"><i class="status-dot"></i>${randomIP()}</span></td>
+                            </tr>
+                        `;
+                    });
+                }
+            })
+            .catch(err => {
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center text-danger py-4">Lỗi kết nối Server!</td></tr>';
+            });
+        });
+
+        document.getElementById('btnCopy').addEventListener('click', function() {
+            if (currentProxies.length === 0) return alert('Chưa có proxy nào để copy!');
+            navigator.clipboard.writeText(currentProxies.join('\n'));
+            alert('Đã copy toàn bộ danh sách proxy!');
+        });
+
+        document.getElementById('btnExport').addEventListener('click', function() {
+            if (currentProxies.length === 0) return alert('Chưa có proxy nào để tải về!');
+            const blob = new Blob([currentProxies.join('\n')], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'proxies.txt';
+            a.click();
+        });
+    </script>
+</body>
+</html>

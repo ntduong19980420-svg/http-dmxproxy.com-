@@ -1,58 +1,70 @@
 import random
-from flask import Flask, jsonify, render_template, request
+import string
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 
 app = Flask(__name__)
+# Chuỗi khóa bảo mật session
+app.secret_key = "dmxproxy_secret_key_super_safe"
 
-PROXYRACK_HOST = "premium.residential.proxyrack.net:10000"
-PROXYRACK_USER = "gojyxogosutase"
-PROXYRACK_PASS = "WPYV6U0-PXC4X1B-5KJAKQA-IAHTEI6-FPBHKYI-BI7X1IT-LRYHKBZ"
-
-ALL_COUNTRIES = [
-    'AF', 'AL', 'DZ', 'AS', 'AD', 'AO', 'AI', 'AQ', 'AG', 'AR', 'AM', 'AW', 'AU', 'AT', 'AZ',
-    'BS', 'BH', 'BD', 'BB', 'BY', 'BE', 'BZ', 'BJ', 'BM', 'BT', 'BO', 'BA', 'BW', 'BR', 'BN',
-    'BG', 'BF', 'BI', 'KH', 'CM', 'CA', 'CV', 'KY', 'CF', 'TD', 'CL', 'CN', 'CO', 'KM', 'CG',
-    'CD', 'CK', 'CR', 'CI', 'HR', 'CU', 'CY', 'CZ', 'DK', 'DJ', 'DM', 'DO', 'EC', 'EG', 'SV',
-    'GQ', 'ER', 'EE', 'ET', 'FJ', 'FI', 'FR', 'GA', 'GM', 'GE', 'DE', 'GH', 'GI', 'GR', 'GL',
-    'GD', 'GU', 'GT', 'GN', 'GW', 'GY', 'HT', 'HN', 'HK', 'HU', 'IS', 'IN', 'ID', 'IR', 'IQ',
-    'IE', 'IL', 'IT', 'JM', 'JP', 'JO', 'KZ', 'KE', 'KI', 'KP', 'KR', 'KW', 'KG', 'LA', 'LV',
-    'LB', 'LS', 'LR', 'LY', 'LI', 'LT', 'LU', 'MO', 'MK', 'MG', 'MW', 'MY', 'MV', 'ML', 'MT',
-    'MH', 'MR', 'MU', 'MX', 'FM', 'MD', 'MC', 'MN', 'ME', 'MA', 'MZ', 'MM', 'NA', 'NR', 'NP',
-    'NL', 'NZ', 'NI', 'NE', 'NG', 'NO', 'OM', 'PK', 'PW', 'PA', 'PG', 'PY', 'PE', 'PH', 'PL',
-    'PT', 'PR', 'QA', 'RO', 'RU', 'RW', 'KN', 'LC', 'VC', 'WS', 'SM', 'ST', 'SA', 'SN', 'RS',
-    'SC', 'SL', 'SG', 'SK', 'SI', 'SB', 'SO', 'ZA', 'ES', 'LK', 'SD', 'SR', 'SZ', 'SE', 'CH',
-    'SY', 'TW', 'TJ', 'TZ', 'TH', 'TL', 'TG', 'TO', 'TT', 'TN', 'TR', 'TM', 'TV', 'UG', 'UA',
-    'AE', 'GB', 'US', 'UY', 'UZ', 'VU', 'VE', 'VN', 'YE', 'ZM', 'ZW'
-]
+# ================================
+# CẤU HÌNH TÀI KHOẢN VÀ MẬT KHẨU
+# ================================
+ADMIN_USERNAME = ""        # Tên tài khoản
+ADMIN_PASSWORD = "123456"          # Mật khẩu đăng nhập
 
 @app.route('/')
 def home():
+    # Kiểm tra xem người dùng đã đăng nhập chưa
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     return render_template('index.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        if username == ADMIN_USERNAME and password == ADMIN_PASSWORD:
+            session['logged_in'] = True
+            return redirect(url_for('home'))
+        else:
+            error = "Tài khoản hoặc mật khẩu không chính xác!"
+
+    return render_template('login.html', error=error)
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
 
 @app.route('/generate', methods=['POST'])
 def generate():
-    data = request.get_json() or {}
-    selected_country = data.get('country', 'ALL').upper()
+    if not session.get('logged_in'):
+        return jsonify({"error": "Unauthorized"}), 401
+
+    data = request.json or {}
+    country = data.get('country', 'ALL')
     os_name = data.get('os', 'Windows')
-
-    try:
-        qty = int(data.get('qty', 10))
-    except (ValueError, TypeError):
-        qty = 10
-
-    qty = max(1, min(qty, 100))
+    qty = int(data.get('qty', 10))
 
     proxies = []
-    for _ in range(qty):
-        if selected_country == 'ALL' or not selected_country:
-            country = random.choice(ALL_COUNTRIES)
-        else:
-            country = selected_country
+    base_host = "premium.residential.proxyrack.net:10000"
+    base_user = "gojyxogosutase"
+    pass_key = "WPYV6U0-PXC4X1B-5KJAKQA-IAHTEI6-FPBHKYI-BI7X1IT-LRYHKBZ"
 
-        sess = ''.join(random.choices('abcdefghijklmnopqrstuvwxyz0123456789', k=12))
-        proxy_str = f'{PROXYRACK_HOST}:{PROXYRACK_USER}-country-{country}-session-{sess}-osName-{os_name}:{PROXYRACK_PASS}'
+    for _ in range(qty):
+        session_id = ''.join(random.choices(string.ascii_lowercase + string.digits, k=12))
+        
+        country_param = ""
+        if country and country != 'ALL':
+            country_param = f"-country-{country}"
+
+        proxy_str = f"{base_host}:{base_user}{country_param}-session-{session_id}-osName-{os_name}:{pass_key}"
         proxies.append(proxy_str)
 
-    return jsonify({'proxies': proxies})
+    return jsonify({"proxies": proxies})
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=5000)
